@@ -4,26 +4,13 @@ import Finish from "../components/Finish";
 import Home from "../components/Home";
 import {fetchQuiz} from "../actions";
 
-const initialState = {
-    type: ''
-};
-
 class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = initialState;
-    }
-
     changeQuizType(type) {
         this.props.dispatch(fetchQuiz(type));
-        this.setState({
-            type: type
-        })
     }
-
     render() {
         const {quiz} = this.props;
-        const {data, index} = quiz;
+        const {data, index, type} = quiz;
         if (quiz.finish) return <Finish score={quiz.score} total={quiz.data.length}/>;
         return (
             <div className="row justify-content-center">
@@ -42,7 +29,7 @@ class App extends Component {
                         </div>
                     </div>
                     <hr/>
-                    {this.state.type && <Home quiz={quiz} question={data[index]} type={this.state.type}/>}
+                    {type && <Home quiz={quiz} question={data[index]} type={type}/>}
                 </div>
             </div>
         );

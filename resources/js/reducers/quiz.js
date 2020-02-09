@@ -1,6 +1,14 @@
-import {FETCH_QUIZ_SUCCESS, FETCH_QUIZ_PENDING, NEXT_QUESTION, FETCH_ANSWER_SUCCESS, RELOAD_QUIZ} from '../constants';
+import {
+    FETCH_QUIZ_SUCCESS,
+    FETCH_QUIZ_PENDING,
+    NEXT_QUESTION,
+    FETCH_ANSWER_SUCCESS,
+    RELOAD_QUIZ,
+    SET_QUIZ_TYPE
+} from '../constants';
 
 const initialState = {
+    type: '',
     index: 0,
     data: [],
     pending: true,
@@ -11,6 +19,11 @@ const initialState = {
 
 const quiz = (state = initialState, action) => {
     switch (action.type) {
+        case SET_QUIZ_TYPE:
+            return {
+                ...state,
+                type: action.payload
+            };
         case RELOAD_QUIZ:
             return initialState;
         case NEXT_QUESTION:

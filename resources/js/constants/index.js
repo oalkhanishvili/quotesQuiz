@@ -1,6 +1,7 @@
 export const QUIZ_TYPE_MULTIPLE = 'multiple';
 export const QUIZ_TYPE_BINARY = 'binary';
 
+export const SET_QUIZ_TYPE = 'SET_QUIZ_TYPE';
 export const RELOAD_QUIZ = 'RELOAD_QUIZ';
 
 export const FETCH_QUIZ_SUCCESS = 'FETCH_QUIZ_SUCCESS';

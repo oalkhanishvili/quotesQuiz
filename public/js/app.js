@@ -74158,6 +74158,13 @@ function fetchQuizError() {
   };
 }
 
+function setQuizType(type) {
+  return {
+    type: _constants__WEBPACK_IMPORTED_MODULE_0__["SET_QUIZ_TYPE"],
+    payload: type
+  };
+}
+
 function reload() {
   return {
     type: _constants__WEBPACK_IMPORTED_MODULE_0__["RELOAD_QUIZ"]
@@ -74169,6 +74176,7 @@ function fetchQuiz() {
   return function (dispatch) {
     dispatch(fetchQuizPending());
     dispatch(reload());
+    dispatch(setQuizType(type));
     return axios.get('api/quote', {
       params: {
         type: type
@@ -74362,7 +74370,6 @@ function (_Component) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Finish; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
@@ -74401,14 +74408,9 @@ function (_Component) {
   }
 
   _createClass(Finish, [{
-    key: "submitAnswer",
-    value: function submitAnswer(id, answer) {
-      this.props.dispatch(Object(_actions__WEBPACK_IMPORTED_MODULE_2__["submitAnswer"])(id, answer));
-    }
-  }, {
     key: "refreshQuiz",
     value: function refreshQuiz() {
-      window.location.reload(false);
+      this.props.dispatch(Object(_actions__WEBPACK_IMPORTED_MODULE_2__["fetchQuiz"])());
     }
   }, {
     key: "render",
@@ -74424,7 +74426,7 @@ function (_Component) {
         onClick: this.refreshQuiz
       }, "FINISH ", score + '/' + total), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
-        onClick: this.refreshQuiz,
+        onClick: this.refreshQuiz.bind(this),
         className: "btn btn-primary btn-lg"
       }, "Start Again")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row justify-content-center"
@@ -74438,7 +74440,7 @@ function (_Component) {
   return Finish;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])()(Finish));
 
 /***/ }),
 
@@ -74790,13 +74792,14 @@ function (_Component) {
 /*!*****************************************!*\
   !*** ./resources/js/constants/index.js ***!
   \*****************************************/
-/*! exports provided: QUIZ_TYPE_MULTIPLE, QUIZ_TYPE_BINARY, RELOAD_QUIZ, FETCH_QUIZ_SUCCESS, FETCH_QUIZ_PENDING, FETCH_QUIZ_ERROR, NEXT_QUESTION, FETCH_ANSWER_SUCCESS */
+/*! exports provided: QUIZ_TYPE_MULTIPLE, QUIZ_TYPE_BINARY, SET_QUIZ_TYPE, RELOAD_QUIZ, FETCH_QUIZ_SUCCESS, FETCH_QUIZ_PENDING, FETCH_QUIZ_ERROR, NEXT_QUESTION, FETCH_ANSWER_SUCCESS */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QUIZ_TYPE_MULTIPLE", function() { return QUIZ_TYPE_MULTIPLE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QUIZ_TYPE_BINARY", function() { return QUIZ_TYPE_BINARY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_QUIZ_TYPE", function() { return SET_QUIZ_TYPE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RELOAD_QUIZ", function() { return RELOAD_QUIZ; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_QUIZ_SUCCESS", function() { return FETCH_QUIZ_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_QUIZ_PENDING", function() { return FETCH_QUIZ_PENDING; });
@@ -74805,6 +74808,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_ANSWER_SUCCESS", function() { return FETCH_ANSWER_SUCCESS; });
 var QUIZ_TYPE_MULTIPLE = 'multiple';
 var QUIZ_TYPE_BINARY = 'binary';
+var SET_QUIZ_TYPE = 'SET_QUIZ_TYPE';
 var RELOAD_QUIZ = 'RELOAD_QUIZ';
 var FETCH_QUIZ_SUCCESS = 'FETCH_QUIZ_SUCCESS';
 var FETCH_QUIZ_PENDING = 'FETCH_QUIZ_PENDING';
@@ -74851,6 +74855,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 var initialState = {
+  type: '',
   index: 0,
   data: [],
   pending: true,
@@ -74864,6 +74869,11 @@ var quiz = function quiz() {
   var action = arguments.length > 1 ? arguments[1] : undefined;
 
   switch (action.type) {
+    case _constants__WEBPACK_IMPORTED_MODULE_0__["SET_QUIZ_TYPE"]:
+      return _objectSpread({}, state, {
+        type: action.payload
+      });
+
     case _constants__WEBPACK_IMPORTED_MODULE_0__["RELOAD_QUIZ"]:
       return initialState;
 
@@ -74941,39 +74951,30 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-var initialState = {
-  type: ''
-};
 
 var App =
 /*#__PURE__*/
 function (_Component) {
   _inherits(App, _Component);
 
-  function App(props) {
-    var _this;
-
+  function App() {
     _classCallCheck(this, App);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this, props));
-    _this.state = initialState;
-    return _this;
+    return _possibleConstructorReturn(this, _getPrototypeOf(App).apply(this, arguments));
   }
 
   _createClass(App, [{
     key: "changeQuizType",
     value: function changeQuizType(type) {
       this.props.dispatch(Object(_actions__WEBPACK_IMPORTED_MODULE_4__["fetchQuiz"])(type));
-      this.setState({
-        type: type
-      });
     }
   }, {
     key: "render",
     value: function render() {
       var quiz = this.props.quiz;
       var data = quiz.data,
-          index = quiz.index;
+          index = quiz.index,
+          type = quiz.type;
       if (quiz.finish) return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Finish__WEBPACK_IMPORTED_MODULE_2__["default"], {
         score: quiz.score,
         total: quiz.data.length
@@ -75000,10 +75001,10 @@ function (_Component) {
       }, "Multiple"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         className: "dropdown-item",
         onClick: this.changeQuizType.bind(this, 'binary')
-      }, "Binary"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), this.state.type && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Home__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      }, "Binary"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), type && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Home__WEBPACK_IMPORTED_MODULE_3__["default"], {
         quiz: quiz,
         question: data[index],
-        type: this.state.type
+        type: type
       })));
     }
   }]);
@@ -75039,6 +75040,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _reducers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../reducers */ "./resources/js/reducers/index.js");
 /* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./App */ "./resources/js/screens/App.js");
 /* harmony import */ var redux_thunk__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! redux-thunk */ "./node_modules/redux-thunk/es/index.js");
+/* harmony import */ var _store_localStorage__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../store/localStorage */ "./resources/js/store/localStorage.js");
 
 
 
@@ -75046,13 +75048,51 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var store = Object(redux__WEBPACK_IMPORTED_MODULE_3__["createStore"])(_reducers__WEBPACK_IMPORTED_MODULE_4__["default"], Object(redux__WEBPACK_IMPORTED_MODULE_3__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_6__["default"]));
+
+var persistedState = Object(_store_localStorage__WEBPACK_IMPORTED_MODULE_7__["loadState"])();
+var store = Object(redux__WEBPACK_IMPORTED_MODULE_3__["createStore"])(_reducers__WEBPACK_IMPORTED_MODULE_4__["default"], persistedState, Object(redux__WEBPACK_IMPORTED_MODULE_3__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_6__["default"]));
+store.subscribe(function () {
+  Object(_store_localStorage__WEBPACK_IMPORTED_MODULE_7__["saveState"])(store.getState());
+});
 
 if (document.getElementById('quiz')) {
   react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_redux__WEBPACK_IMPORTED_MODULE_2__["Provider"], {
     store: store
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_App__WEBPACK_IMPORTED_MODULE_5__["default"], null)), document.getElementById('quiz'));
 }
+
+/***/ }),
+
+/***/ "./resources/js/store/localStorage.js":
+/*!********************************************!*\
+  !*** ./resources/js/store/localStorage.js ***!
+  \********************************************/
+/*! exports provided: loadState, saveState */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadState", function() { return loadState; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "saveState", function() { return saveState; });
+var loadState = function loadState() {
+  try {
+    var serializedState = localStorage.getItem('state');
+
+    if (serializedState === null) {
+      return undefined;
+    }
+
+    return JSON.parse(serializedState);
+  } catch (e) {
+    return undefined;
+  }
+};
+var saveState = function saveState(state) {
+  try {
+    var serializedState = JSON.stringify(state);
+    localStorage.setItem('state', serializedState);
+  } catch (e) {}
+};
 
 /***/ }),
 

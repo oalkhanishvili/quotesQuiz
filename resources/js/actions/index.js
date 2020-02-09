@@ -2,7 +2,7 @@ import {
     FETCH_QUIZ_SUCCESS,
     FETCH_QUIZ_PENDING,
     FETCH_QUIZ_ERROR,
-    FETCH_ANSWER_SUCCESS, RELOAD_QUIZ
+    FETCH_ANSWER_SUCCESS, RELOAD_QUIZ, SET_QUIZ_TYPE
 } from "../constants";
 
 function fetchQuizSuccess(data) {
@@ -20,6 +20,12 @@ function fetchQuizError() {
         type: FETCH_QUIZ_ERROR,
     };
 }
+function setQuizType(type) {
+    return {
+        type: SET_QUIZ_TYPE,
+        payload: type
+    };
+}
 function reload() {
     return {
         type: RELOAD_QUIZ,
@@ -29,6 +35,7 @@ export function fetchQuiz(type = '') {
     return dispatch => {
         dispatch(fetchQuizPending());
         dispatch(reload());
+        dispatch(setQuizType(type));
         return axios.get('api/quote', {
             params: {
                 type: type

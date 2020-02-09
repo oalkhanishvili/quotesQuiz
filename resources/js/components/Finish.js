@@ -1,14 +1,10 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {submitAnswer} from "../actions";
+import {fetchQuiz, submitAnswer} from "../actions";
 
-export default class Finish extends Component {
-    submitAnswer(id, answer) {
-        this.props.dispatch(submitAnswer(id, answer))
-    }
-
+class Finish extends Component {
     refreshQuiz() {
-        window.location.reload(false);
+        this.props.dispatch(fetchQuiz());
     }
 
     render() {
@@ -18,7 +14,7 @@ export default class Finish extends Component {
                 <div className="d-flex justify-content-between m-5">
 
                     <h1 onClick={this.refreshQuiz}>FINISH {score + '/' + total}</h1>
-                    <button type="button" onClick={this.refreshQuiz} className="btn btn-primary btn-lg">Start Again
+                    <button type="button" onClick={this.refreshQuiz.bind(this)} className="btn btn-primary btn-lg">Start Again
                     </button>
                 </div>
                 <div className="row justify-content-center">
@@ -28,3 +24,5 @@ export default class Finish extends Component {
         );
     }
 }
+
+export default connect()(Finish);
