@@ -21,7 +21,7 @@ class QuoteController extends Controller
     {
         return QuoteResource::collection(Quote::query()
             ->inRandomOrder()
-            ->where('type', $request->get('type'))
+            ->where('type', $request->get('type', 'binary'))
             ->limit(10)->get());
     }
     /**
