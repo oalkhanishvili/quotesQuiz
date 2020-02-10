@@ -4,7 +4,7 @@ import {
     NEXT_QUESTION,
     FETCH_ANSWER_SUCCESS,
     RELOAD_QUIZ,
-    SET_QUIZ_TYPE
+    SET_QUIZ_TYPE, FETCH_ANSWER_PENDING
 } from '../constants';
 
 const initialState = {
@@ -37,8 +37,14 @@ const quiz = (state = initialState, action) => {
             return {
                 ...state,
                 message: {text: action.payload.message, status: action.payload.correct},
+                pending: false,
                 score: state.score + action.payload.correct
-            }
+            };
+        case FETCH_ANSWER_PENDING:
+            return {
+                ...state,
+                pending: true,
+            };
         case FETCH_QUIZ_SUCCESS:
             return {
                 ...state,

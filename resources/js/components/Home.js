@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {fetchQuiz, submitAnswer} from "../actions";
 import Loader from 'react-loader';
-import {NEXT_QUESTION, QUIZ_TYPE_BINARY, QUIZ_TYPE_MULTIPLE} from "../constants";
+import {FETCH_QUIZ_PENDING, NEXT_QUESTION, QUIZ_TYPE_BINARY, QUIZ_TYPE_MULTIPLE} from "../constants";
 import Binary from "./Binary";
 import Multiple from "./Multiple";
 import Quote from "./Quote";
@@ -27,14 +27,16 @@ class Home extends Component {
     submitAnswer(id, answerId) {
         this.props.dispatch(submitAnswer(id, answerId))
     }
-
-    changeQuizType(type) {
+    calculateProgress() {
+        const {quiz} = this.props;
+        return (quiz.index / quiz.data.length) * 100 + '%';
+    }
+    changeQuizType (type)  {
         this.props.dispatch(fetchQuiz(type));
         this.setState({
             type: type
         })
     }
-
     render() {
         const {quiz, question, type} = this.props;
         if (quiz.pending) return <Loader/>;
@@ -43,6 +45,11 @@ class Home extends Component {
             <div className="card">
                 <div className="card-header">
                     Quiz Type: <span style={{textTransform: 'capitalize'}}>{type}</span>
+                    <div className="progress">
+                        <div className="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="100"
+                             style={{width: this.calculateProgress()}}
+                             aria-valuemax="100" />
+                    </div>
                 </div>
                 <div className="card-body">
 

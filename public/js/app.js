@@ -74198,8 +74198,15 @@ function fetchCheckAnswer(data) {
   };
 }
 
+function fetchCheckAnswerPending() {
+  return {
+    type: _constants__WEBPACK_IMPORTED_MODULE_0__["FETCH_ANSWER_PENDING"]
+  };
+}
+
 function submitAnswer(id, answer) {
   return function (dispatch) {
+    dispatch(fetchCheckAnswerPending());
     return axios.get('api/quote/' + id + '/check', {
       params: {
         answer: answer
@@ -74525,6 +74532,12 @@ function (_Component) {
       this.props.dispatch(Object(_actions__WEBPACK_IMPORTED_MODULE_2__["submitAnswer"])(id, answerId));
     }
   }, {
+    key: "calculateProgress",
+    value: function calculateProgress() {
+      var quiz = this.props.quiz;
+      return quiz.index / quiz.data.length * 100 + '%';
+    }
+  }, {
     key: "changeQuizType",
     value: function changeQuizType(type) {
       this.props.dispatch(Object(_actions__WEBPACK_IMPORTED_MODULE_2__["fetchQuiz"])(type));
@@ -74548,7 +74561,18 @@ function (_Component) {
         style: {
           textTransform: 'capitalize'
         }
-      }, type)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, type), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "progress"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "progress-bar",
+        role: "progressbar",
+        "aria-valuenow": "100",
+        "aria-valuemin": "100",
+        style: {
+          width: this.calculateProgress()
+        },
+        "aria-valuemax": "100"
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-body"
       }, !quiz.message && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "quiz-body"
@@ -74792,7 +74816,7 @@ function (_Component) {
 /*!*****************************************!*\
   !*** ./resources/js/constants/index.js ***!
   \*****************************************/
-/*! exports provided: QUIZ_TYPE_MULTIPLE, QUIZ_TYPE_BINARY, SET_QUIZ_TYPE, RELOAD_QUIZ, FETCH_QUIZ_SUCCESS, FETCH_QUIZ_PENDING, FETCH_QUIZ_ERROR, NEXT_QUESTION, FETCH_ANSWER_SUCCESS */
+/*! exports provided: QUIZ_TYPE_MULTIPLE, QUIZ_TYPE_BINARY, SET_QUIZ_TYPE, RELOAD_QUIZ, FETCH_QUIZ_SUCCESS, FETCH_QUIZ_PENDING, FETCH_QUIZ_ERROR, NEXT_QUESTION, FETCH_ANSWER_SUCCESS, FETCH_ANSWER_PENDING */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -74806,6 +74830,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_QUIZ_ERROR", function() { return FETCH_QUIZ_ERROR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NEXT_QUESTION", function() { return NEXT_QUESTION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_ANSWER_SUCCESS", function() { return FETCH_ANSWER_SUCCESS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_ANSWER_PENDING", function() { return FETCH_ANSWER_PENDING; });
 var QUIZ_TYPE_MULTIPLE = 'multiple';
 var QUIZ_TYPE_BINARY = 'binary';
 var SET_QUIZ_TYPE = 'SET_QUIZ_TYPE';
@@ -74815,6 +74840,7 @@ var FETCH_QUIZ_PENDING = 'FETCH_QUIZ_PENDING';
 var FETCH_QUIZ_ERROR = 'FETCH_QUIZ_ERROR';
 var NEXT_QUESTION = 'NEXT_QUESTION';
 var FETCH_ANSWER_SUCCESS = 'FETCH_ANSWER_SUCCESS';
+var FETCH_ANSWER_PENDING = 'FETCH_ANSWER_PENDING';
 
 /***/ }),
 
@@ -74890,7 +74916,13 @@ var quiz = function quiz() {
           text: action.payload.message,
           status: action.payload.correct
         },
+        pending: false,
         score: state.score + action.payload.correct
+      });
+
+    case _constants__WEBPACK_IMPORTED_MODULE_0__["FETCH_ANSWER_PENDING"]:
+      return _objectSpread({}, state, {
+        pending: true
       });
 
     case _constants__WEBPACK_IMPORTED_MODULE_0__["FETCH_QUIZ_SUCCESS"]:

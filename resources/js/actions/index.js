@@ -2,7 +2,7 @@ import {
     FETCH_QUIZ_SUCCESS,
     FETCH_QUIZ_PENDING,
     FETCH_QUIZ_ERROR,
-    FETCH_ANSWER_SUCCESS, RELOAD_QUIZ, SET_QUIZ_TYPE
+    FETCH_ANSWER_SUCCESS, RELOAD_QUIZ, SET_QUIZ_TYPE, FETCH_ANSWER_PENDING
 } from "../constants";
 
 function fetchQuizSuccess(data) {
@@ -56,8 +56,14 @@ function fetchCheckAnswer(data) {
         payload: data,
     };
 }
+function fetchCheckAnswerPending() {
+    return {
+        type: FETCH_ANSWER_PENDING,
+    };
+}
 export function submitAnswer(id, answer) {
     return dispatch => {
+        dispatch(fetchCheckAnswerPending());
         return axios.get('api/quote/' + id + '/check', {
             params: {
                 answer: answer
